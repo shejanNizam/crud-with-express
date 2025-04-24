@@ -156,7 +156,40 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-//  DELETE TODOS
-router.delete("/:id", async (req, res) => {});
+// DELETE TODO
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ID format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid todo ID format",
+      });
+    }
+
+    const result = await Todo.deleteOne({ _id: id });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Todo not found or already deleted",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Todo was deleted successfully!",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: "There was a server side error!",
+      details: error.message,
+    });
+  }
+});
 
 module.exports = router;
