@@ -13,6 +13,10 @@ mongoose
 const app = express();
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 // application routes
 app.use("/todo", todoHandler);
 

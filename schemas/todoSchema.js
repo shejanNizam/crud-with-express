@@ -15,5 +15,4 @@ const todoSchema = mongoose.Schema({
     default: Date.now,
   },
 });
-
 module.exports = todoSchema;

@@ -1,30 +1,33 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const todoSchema = require("../schems/todoSchema");
+const todoSchema = require("../schemas/todoSchema");
 
 const Todo = new mongoose.model("Todo", todoSchema);
 
 //  GET ALL THE TODOS
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+  console.log("hello");
+});
 
 //  GET A TODOS BY ID
 router.get("/:id", async (req, res) => {});
 
 //  POST A TODO
 router.post("/", async (req, res) => {
-  const newTodo = new Todo(req.body);
-  await newTodo.save((err) => {
-    if (err) {
-      res.status(500).json({
-        error: " There was a server side error! ",
-      });
-    } else {
-      res.status(200).json({
-        message: "Todo was inserted successfully!",
-      });
-    }
-  });
+  try {
+    const newTodo = new Todo(req.body);
+    const savedTodo = await newTodo.save();
+    res.status(200).json({
+      message: "Todo was inserted successfully!",
+      todo: savedTodo,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "There was an  server side error!",
+      details: error.message,
+    });
+  }
 });
 
 //  POST MULTIPLE TODOS
