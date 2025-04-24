@@ -10,7 +10,7 @@ const todoSchema = mongoose.Schema({
     type: String,
     enum: ["active", "inactive"],
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },

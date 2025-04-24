@@ -7,7 +7,7 @@ const Todo = new mongoose.model("Todo", todoSchema);
 
 //  GET ALL THE TODOS
 router.get("/", async (req, res) => {
-  console.log("hello");
+  console.log("hello ");
 });
 
 //  GET A TODOS BY ID
@@ -31,7 +31,26 @@ router.post("/", async (req, res) => {
 });
 
 //  POST MULTIPLE TODOS
-router.post("/all", async (req, res) => {});
+router.post("/all", async (req, res) => {
+  if (!Array.isArray(req.body)) {
+    return res.status(400).json({
+      error: "Request body should be an array of todos",
+    });
+  }
+
+  const savedAllTodo = await Todo.insertMany(req.body);
+  try {
+    res.status(200).json({
+      message: "Todo was inserted successfully!",
+      todo: savedAllTodo,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "There was an  server side error!",
+      details: error.message,
+    });
+  }
+});
 
 //  PUT TODO
 router.put("/:id", async (req, res) => {});
